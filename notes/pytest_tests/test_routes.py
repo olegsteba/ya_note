@@ -12,7 +12,12 @@ from pytest_django.asserts import assertRedirects
     ('notes:home', 'users:login', 'users:logout', 'users:signup'),
 )
 def test_home_availability_for_anonymous_user(client, name):
-    """Главная страница доступна анонимному пользователю."""
+    """Страницы доступны анонимному пользователю:
+    - главная страница;
+    - страница авторизации;
+    - страница выхода;
+    - страница регистрации.
+    """
     url = reverse(name)
     response = client.get(url)
     assert response.status_code == HTTPStatus.OK
