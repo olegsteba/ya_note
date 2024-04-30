@@ -49,3 +49,13 @@ def note(author):
 def slug_for_args(note):
     """Возвращает кортеж который содержит слаг заметки (url-адрес)."""
     return (note.slug,)
+
+
+@pytest.fixture
+def form_data():
+    """Значение формы записи."""
+    return {
+        'title': 'Новый заголовок',
+        'text': 'Новый текст',
+        'slug': 'new-slug',
+    }
