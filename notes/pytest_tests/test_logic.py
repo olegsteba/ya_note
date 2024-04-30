@@ -17,7 +17,6 @@ URL_NOTE_SUCCESS = reverse('notes:success')
 URL_LOGIN = reverse('users:login')
 
 
-
 def test_user_can_create_note(author_client, author, form_data):
     """Создание заметки авторизированным пользователем."""
     response = author_client.post(URL_NOTE_ADD, data=form_data)
