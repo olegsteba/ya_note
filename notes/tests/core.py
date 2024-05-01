@@ -11,12 +11,12 @@ ANON = 'Анонимуc'
 NOTE_DATA = {
     'title': 'Заголовок',
     'text': 'Текст заметки',
-    'slug': 'zametka',
+    'slug': 'zagolovok',
 }
 NOTE_NEW_DATA = {
     'title': 'Заголовок новый',
     'text': 'Текст заметки новый',
-    'slug': 'zametka_new',
+    'slug': 'zagolovok_novyj',
 }
 URLS = {
     'home': 'notes:home',
@@ -42,10 +42,10 @@ class CoreTestCase(TestCase):
         cls.user_client = Client()
         cls.user_client.force_login(cls.user)
         cls.form_data = NOTE_DATA
-        cls.forn_new_data = NOTE_NEW_DATA
-        # cls.note = Note.objects.create(
-        #     title=NOTE_DATA['title'],
-        #     text=NOTE_DATA['text'],
-        #     slug=NOTE_DATA['slug'],
-        #     author=cls.author
-        # )
+        cls.form_new_data = NOTE_NEW_DATA
+        cls.note = Note.objects.create(
+            title=NOTE_DATA['title'],
+            text=NOTE_DATA['text'],
+            slug=NOTE_DATA['slug'],
+            author=cls.author,
+        )

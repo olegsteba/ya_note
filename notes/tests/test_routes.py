@@ -1,36 +1,20 @@
 from http import HTTPStatus
 
-from django.contrib.auth import get_user_model
-from django.test import Client, TestCase
 from django.urls import reverse
 
-from notes.models import Note
+from notes.tests.core import CoreTestCase, URLS
 
 
-User = get_user_model()
-
-
-class TestRoutes(TestCase):
+class TestRoutes(CoreTestCase):
     """Тестирование доступности конкретных маршрутов."""
-
-    @classmethod
-    def setUpTestData(cls):
-        cls.guest_client = Client()
-        cls.author = User.objects.create(username='author')
-        cls.reader = User.objects.create(username='reader')
-        cls.note = Note.objects.create(
-            title='Тестовый заголовок',
-            text='Тестовая запись заметки',
-            author=cls.author
-        )
 
     def test_page_availability(self):
         """Доступность страниц для ананимного пользователя."""
         urls = (
-            ('notes:home', None),
-            ('users:login', None),
-            ('users:logout', None),
-            ('users:signup', None),
+            (URLS['home'], None),
+            (URLS['login'], None),
+            (URLS['logout'], None),
+            (URLS['signup'], None),
         )
         for name, args in urls:
             with self.subTest(name=name):
@@ -46,16 +30,16 @@ class TestRoutes(TestCase):
         - детальный просмотр записи, маршрут 'notes:detail';
         - удаление записи, маршрут 'notes:delete'.
         """
+        self.note.refresh_from_db()
         users_statuses = (
             (self.author, HTTPStatus.OK),
-            (self.reader, HTTPStatus.NOT_FOUND),
+            (self.user, HTTPStatus.NOT_FOUND),
         )
         urls = (
-            ('notes:edit', (self.note.slug,)),
-            ('notes:detail', (self.note.slug,)),
-            ('notes:delete', (self.note.slug,)),
+            (URLS['edit'], (self.note.slug,)),
+            (URLS['detail'], (self.note.slug,)),
+            (URLS['delete'], (self.note.slug,)),
         )
-
         for user, status in users_statuses:
             self.client.force_login(user)
             for name, args in urls:
@@ -75,14 +59,15 @@ class TestRoutes(TestCase):
         - просмотр списка записей, мфршрут 'notes:list';
         - страница удачного входа, маршрут 'notes:success'.
         """
-        login_url = reverse('users:login')
+        self.note.refresh_from_db()
+        login_url = reverse(URLS['login'])
         urls = (
-            ('notes:add', None),
-            ('notes:edit', (self.note.slug,)),
-            ('notes:detail', (self.note.slug,)),
-            ('notes:delete', (self.note.slug,)),
-            ('notes:list', None),
-            ('notes:success', None),
+            (URLS['add'], None),
+            (URLS['edit'], (self.note.slug,)),
+            (URLS['detail'], (self.note.slug,)),
+            (URLS['delete'], (self.note.slug,)),
+            (URLS['list'], None),
+            (URLS['success'], None),
         )
 
         for name, args in urls:
