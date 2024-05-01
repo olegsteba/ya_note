@@ -72,6 +72,7 @@ def test_other_cant_edit_note(not_author_client, form_data, note):
     url = reverse('notes:edit', args=(note.slug, ))
     response = not_author_client.post(url, form_data)
     assert response.status_code == HTTPStatus.NOT_FOUND
+    note.refresh_from_db()
     note_from_db = Note.objects.get(id=note.id)
     assert note.title == note_from_db.title
     assert note.text == note_from_db.text
